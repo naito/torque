@@ -93,12 +93,11 @@ END_TEST
 START_TEST(set_array_depend_holds_test)
   {
   batch_request *preq = (batch_request *)calloc(1, sizeof(batch_request));
-  job_array     *pa = (job_array *)calloc(1, sizeof(job_array));
+  job_array     *pa = new job_array();
 
   strcpy(preq->rq_ind.rq_register.rq_child, job1);
   strcpy(preq->rq_ind.rq_register.rq_svr, host);
 
-  CLEAR_HEAD(pa->ai_qs.deps);
   fail_unless(register_array_depend(pa, preq, JOB_DEPEND_TYPE_AFTEROKARRAY, 10) == PBSE_NONE);
   pa->ai_qs.num_successful = 12;
   fail_unless(set_array_depend_holds(pa) == true);
@@ -686,6 +685,18 @@ START_TEST(set_depend_hold_test)
   set_depend_hold(&pjob2, pattr, NULL);
   fail_unless((pjob2.ji_wattr[JOB_ATR_hold].at_flags & ATR_VFLAG_SET) == 0);
   fail_unless(pjob2.ji_qs.ji_state != JOB_STATE_HELD);
+
+  memset(&pjob, 0, sizeof(pjob));
+  pattr = &pjob.ji_wattr[JOB_ATR_depend];
+  initialize_depend_attr(pattr);
+  pdep = make_depend(JOB_DEPEND_TYPE_AFTERSTARTARRAY, pattr);
+  // intentially skip make_depend() call so
+  // a dependency is not actually created.
+  // set_depend_hold() expected to gracefully
+  // handle this condition.
+  set_depend_hold(&pjob, pattr, NULL);
+  fail_unless((pjob.ji_wattr[JOB_ATR_hold].at_flags & ATR_VFLAG_SET) == 0);
+  fail_unless(pjob.ji_qs.ji_state != JOB_STATE_HELD);
   }
 END_TEST
 

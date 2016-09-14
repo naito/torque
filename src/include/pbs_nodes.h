@@ -174,6 +174,16 @@ class gpusubn
   short           index;  /* gpu index */
   std::string     gpuid;  /* gpu id */
   int             job_count;
+
+  gpusubn() : job_internal_id(-1), inuse(false), state(gpu_unallocated), mode(gpu_normal),
+              driver_ver(-1), flag(okay), index(-1), gpuid(), job_count(0)
+    {
+    }
+
+  gpusubn(int gindex) : job_internal_id(-1), inuse(false), state(gpu_unallocated), mode(gpu_normal),
+              driver_ver(-1), flag(okay), index(gindex), gpuid(), job_count(0)
+    {
+    }
   };
 
 
@@ -317,7 +327,7 @@ public:
   const char *get_name() const;
   bool        hasprop(std::vector<prop> *props) const;
   void        write_compute_node_properties(FILE *nin) const;
-  void        write_to_nodes_file(FILE *nin, bool cray_enabled) const;
+  void        write_to_nodes_file(FILE *nin) const;
   int         copy_properties(pbsnode *dest) const;
   int         get_version() const;
 
