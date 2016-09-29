@@ -339,6 +339,10 @@ job *svr_find_job(const char *jobid, int get_subjob)
     {
     return(NULL);
     }
+  else if (!strcmp(jobid, "2.napali"))
+    {
+    pjob.ji_qs.ji_state = JOB_STATE_RUNNING;
+    }
   else if (strcmp(jobid, "2"))
     {
     pjob.ji_wattr[JOB_ATR_exec_host].at_val.at_str = strdup("bob/5");
@@ -685,7 +689,7 @@ ssize_t write_ac_socket(int fd, const void *buf, ssize_t count)
 
 
 pbsnode::pbsnode() : nd_error(0), nd_properties(),
-                     nd_mutex(), nd_id(-1), nd_addrs(), nd_prop(NULL), nd_status(NULL),
+                     nd_mutex(), nd_id(-1), nd_addrs(), nd_prop(NULL), nd_status(),
                      nd_note(),
                      nd_stream(-1),
                      nd_flag(okay), nd_mom_port(PBS_MOM_SERVICE_PORT),
@@ -718,7 +722,7 @@ pbsnode::pbsnode(
   const char *pname,
   u_long     *pul,
   bool        skip_address_lookup) : nd_error(0), nd_properties(), nd_mutex(), nd_prop(NULL),
-                                     nd_status(NULL),
+                                     nd_status(),
                                      nd_note(),
                                      nd_stream(-1),
                                      nd_flag(okay),
