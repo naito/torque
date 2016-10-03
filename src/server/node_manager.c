@@ -170,8 +170,6 @@ extern int              has_nodes;
 extern int create_a_gpusubnode(struct pbsnode *);
 int        is_gpustat_get(struct pbsnode *np, char **str_ptr);
 
-extern int              ctnodes(char *);
-
 extern char            *path_home;
 extern char            *path_nodes;
 extern char            *path_node_usage;
@@ -4155,7 +4153,7 @@ void update_req_hostlist(
   if (pjob->ji_wattr[JOB_ATR_req_information].at_val.at_ptr == NULL)
     {
     get_svr_attr_l(SRV_ATR_LegacyVmem, &legacy_vmem);
-    cr = new complete_req(pjob->ji_wattr[JOB_ATR_resource].at_val.at_list, ppn_needed, (bool)legacy_vmem);
+    cr = new complete_req(pjob->ji_wattr[JOB_ATR_resource].at_val.at_ptr, ppn_needed, (bool)legacy_vmem);
     pjob->ji_wattr[JOB_ATR_req_information].at_val.at_ptr = cr; 
     pjob->ji_wattr[JOB_ATR_req_information].at_flags |= ATR_VFLAG_SET;
     }
