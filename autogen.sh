@@ -3,7 +3,7 @@
 set -e
 
 mkdir -p m4
-libtoolize -c -f
+glibtoolize -c -f
 aclocal
 autoconf -f
 autoheader -f
